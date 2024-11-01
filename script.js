@@ -29,10 +29,16 @@ let lockBoard = false;
 */
 function initGame() {
     // Write your code here
+    let gameboard = document.getElementById('game-board');
+    gameboard.innerHTML = '';
 
-    document.getElementById('restart-btn').addEventListener('click', initGame);
     shuffleArray(cards);
-    game-board.appendChild(card);
+
+    cards.forEach(symbol => {
+            let card = createCard(symbol);
+            gameboard.appendChild(card);
+    })
+    document.getElementById('restart-btn').addEventListener('click', initGame);
 }
 
 /*
@@ -42,10 +48,13 @@ function initGame() {
 */
 function createCard(symbol) {
     // Write your code here
+    const card = document.createElement('div');
     card.classList.add('card');
-    card.dataset.fruit = fruit;
-    card.dataset.index = index;
-    card.addEventListener('click', flipCard);
+    card.dataset.fruit = symbol;
+    card.addEventListener('click', function(){
+        flipCard(card);
+    })
+    return card;
 }
 
 /*
@@ -60,13 +69,13 @@ function flipCard(card) {
     // If the board is supposed to be locked or you picked the same card you already picked
     if (lockBoard || card === firstCard) return;
     // Write your code here
-    this.classList.add('flipped');
-    this.innerText = this.dataset.fruit;
+    card.classList.add('flipped');
+    card.innerText = card.dataset.fruit;
 
     if (!firstCard) {
-        firstCard = this;
+        firstCard = card;
       } else {
-        secondCard = this;
+        secondCard = card;
         checkForMatch();
       }
 }
